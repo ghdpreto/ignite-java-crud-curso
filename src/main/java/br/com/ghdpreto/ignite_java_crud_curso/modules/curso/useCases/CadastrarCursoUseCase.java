@@ -2,7 +2,6 @@ package br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.ghdpreto.ignite_java_crud_curso.entities.CursoEntity;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.CadastrarCursoDTO;

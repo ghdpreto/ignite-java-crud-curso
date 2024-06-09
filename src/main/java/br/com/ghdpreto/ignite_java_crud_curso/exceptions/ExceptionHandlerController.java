@@ -10,7 +10,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.ghdpreto.ignite_java_crud_curso.exceptions.dtos.ErroResponseDTO;
 import br.com.ghdpreto.ignite_java_crud_curso.exceptions.dtos.ErroValidacaoResponseDTO;
+import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.exceptions.CursoNotFoundException;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
@@ -33,5 +35,11 @@ public class ExceptionHandlerController {
 
         return ResponseEntity.badRequest().body(dto);
 
+    }
+
+    // #### TRATAMENTO DE ERROS ####
+    @ExceptionHandler(CursoNotFoundException.class)
+    public ResponseEntity<ErroResponseDTO> handleCursoNotFoundException(CursoNotFoundException e) {
+        return ResponseEntity.notFound().build();
     }
 }

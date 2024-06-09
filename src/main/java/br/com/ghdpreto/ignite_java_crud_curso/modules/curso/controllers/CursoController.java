@@ -42,11 +42,11 @@ public class CursoController {
     private AtivarCursoUseCase ativarCursoUseCase;
 
     @PostMapping()
-    public ResponseEntity<CursoEntity> cadastrar(@Valid @RequestBody CadastrarCursoDTO cadastrarCursoDTO) {
+    public ResponseEntity<CursoResponseDTO> cadastrar(@Valid @RequestBody CadastrarCursoDTO cadastrarCursoDTO) {
 
         CursoEntity curso = this.cadastrarCursoUseCase.execute(cadastrarCursoDTO);
 
-        return ResponseEntity.ok().body(curso);
+        return ResponseEntity.ok().body(new CursoResponseDTO(curso));
 
     }
 

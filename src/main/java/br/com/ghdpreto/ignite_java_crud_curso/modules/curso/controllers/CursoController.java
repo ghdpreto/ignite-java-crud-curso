@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,10 @@ import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.AtualizarCursoD
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.CadastrarCursoDTO;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.CursoResponseDTO;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.CursosListResponseDTO;
+import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.AtivarCursoSwagger;
+import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.AtualizarCursoSwagger;
+import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.CadastrarCursoSwagger;
+import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.ListarCursosSwagger;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.AtivarCursoUseCase;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.AtualizarCursoUseCase;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.CadastrarCursoUseCase;
@@ -42,15 +48,16 @@ public class CursoController {
     private AtivarCursoUseCase ativarCursoUseCase;
 
     @PostMapping()
+    @CadastrarCursoSwagger
     public ResponseEntity<CursoResponseDTO> cadastrar(@Valid @RequestBody CadastrarCursoDTO cadastrarCursoDTO) {
 
         CursoEntity curso = this.cadastrarCursoUseCase.execute(cadastrarCursoDTO);
 
-        return ResponseEntity.ok().body(new CursoResponseDTO(curso));
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CursoResponseDTO(curso));
     }
 
     @GetMapping()
+    @ListarCursosSwagger
     public ResponseEntity<CursosListResponseDTO> getCursos() {
 
         List<CursoEntity> cursos = this.listarCursosUseCase.execute();
@@ -60,7 +67,8 @@ public class CursoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable String id,
+    @AtualizarCursoSwagger
+    public ResponseEntity<CursoResponseDTO> atualizar(@PathVariable String id,
             @Valid @RequestBody AtualizarCursoDTO atualizarCursoDTO) {
 
         CursoEntity curso = this.atualizarCursoUseCase.execute(atualizarCursoDTO, UUID.fromString(id));
@@ -70,7 +78,8 @@ public class CursoController {
     }
 
     @PatchMapping("{id}/active")
-    public ResponseEntity<Object> ativar(@PathVariable String id) {
+    @AtivarCursoSwagger
+    public ResponseEntity<CursoResponseDTO> ativar(@PathVariable String id) {
         CursoEntity curso = this.ativarCursoUseCase.execute(UUID.fromString(id));
 
         return ResponseEntity.ok().body(new CursoResponseDTO(curso));

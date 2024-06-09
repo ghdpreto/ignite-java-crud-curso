@@ -3,7 +3,6 @@ package br.com.ghdpreto.ignite_java_crud_curso.modules.curso.controllers;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.logging.log4j.spi.ObjectThreadContextMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,11 +15,13 @@ import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.AtualizarCursoD
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.CadastrarCursoDTO;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.CursoResponseDTO;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.dtos.CursosListResponseDTO;
+import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.AtivarCursoUseCase;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.AtualizarCursoUseCase;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.CadastrarCursoUseCase;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.ListarCursosUseCase;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -36,6 +37,9 @@ public class CursoController {
 
     @Autowired
     private AtualizarCursoUseCase atualizarCursoUseCase;
+
+    @Autowired
+    private AtivarCursoUseCase ativarCursoUseCase;
 
     @PostMapping()
     public ResponseEntity<CursoEntity> cadastrar(@Valid @RequestBody CadastrarCursoDTO cadastrarCursoDTO) {
@@ -63,5 +67,12 @@ public class CursoController {
 
         return ResponseEntity.ok().body(new CursoResponseDTO(curso));
 
+    }
+
+    @PatchMapping("{id}/active")
+    public ResponseEntity<Object> ativar(@PathVariable String id) {
+        CursoEntity curso = this.ativarCursoUseCase.execute(UUID.fromString(id));
+
+        return ResponseEntity.ok().body(new CursoResponseDTO(curso));
     }
 }

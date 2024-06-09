@@ -46,10 +46,10 @@ public class CursoController {
 
     }
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<CursosListResponseDTO> getCursos() {
 
-        List<CursoResponseDTO> cursos = this.listarCursosUseCase.execute();
+        List<CursoEntity> cursos = this.listarCursosUseCase.execute();
 
         return ResponseEntity.ok().body(new CursosListResponseDTO(cursos));
 
@@ -61,7 +61,7 @@ public class CursoController {
 
         CursoEntity curso = this.atualizarCursoUseCase.execute(atualizarCursoDTO, UUID.fromString(id));
 
-        return ResponseEntity.ok().body(curso);
+        return ResponseEntity.ok().body(new CursoResponseDTO(curso));
 
     }
 }

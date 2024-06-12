@@ -21,11 +21,15 @@ import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.AtivarCursoS
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.AtualizarCursoSwagger;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.CadastrarCursoSwagger;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.ListarCursosSwagger;
+import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.swagger.RemoverCursoSwagger;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.AtivarCursoUseCase;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.AtualizarCursoUseCase;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.CadastrarCursoUseCase;
 import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.ListarCursosUseCase;
+import br.com.ghdpreto.ignite_java_crud_curso.modules.curso.useCases.RemoverCursoUseCase;
 import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,6 +50,9 @@ public class CursoController {
 
     @Autowired
     private AtivarCursoUseCase ativarCursoUseCase;
+
+    @Autowired
+    private RemoverCursoUseCase removerCursoUseCase;
 
     @PostMapping()
     @CadastrarCursoSwagger
@@ -83,5 +90,13 @@ public class CursoController {
         CursoEntity curso = this.ativarCursoUseCase.execute(UUID.fromString(id));
 
         return ResponseEntity.ok().body(new CursoResponseDTO(curso));
+    }
+
+    @DeleteMapping("{id}")
+    @RemoverCursoSwagger
+    public ResponseEntity<Object> deletear(@PathVariable String id) {
+        this.removerCursoUseCase.execute(UUID.fromString(id));
+
+        return ResponseEntity.noContent().build();
     }
 }
